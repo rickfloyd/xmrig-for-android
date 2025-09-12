@@ -1,0 +1,40 @@
+{
+  "name": "@xmrig-for-android/core-miner",
+  "version": "0.1.0",
+  "description": "Core mining controller interfaces and implementations for XMRig for Android",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "xmrig",
+    "mining",
+    "cryptocurrency",
+    "monero",
+    "android"
+  ],
+  "author": {
+    "name": "XMRig for Android Contributors",
+    "email": "garry@lachman.co"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.9.0",
+    "@types/node": "^18.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/XMRig-for-Android/xmrig-for-android",
+    "directory": "packages/core-miner"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

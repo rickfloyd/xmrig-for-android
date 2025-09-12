@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card, Slider, Text, View,
+  Card, Slider, Switch, Text, View,
 } from 'react-native-ui-lib';
 import { useDebouncedCallback } from 'use-debounce';
 import { SettingsCardProps } from '.';
@@ -69,6 +69,20 @@ const SettingsOthersCard:React.FC<SettingsCardProps<ISettings>> = ({
               {settings.donation}
               %
             </Text>
+          </View>
+        </View>
+        <View marginB-10>
+          <View flex marginB-5>
+            <Text text75 $textDefault flex column row>Allow Background Mining</Text>
+            <Text text100 $textDefault row>
+              When disabled, mining stops when app goes to background and wake lock is not used
+            </Text>
+          </View>
+          <View row flex centerV>
+            <Switch
+              value={settings.allowBackgroundMining}
+              onValueChange={(value) => onUpdate({ allowBackgroundMining: value })}
+            />
           </View>
         </View>
       </View>
