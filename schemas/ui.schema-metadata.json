@@ -1,0 +1,269 @@
+{
+  "title": "XMRig UI Schema Metadata",
+  "description": "UI generation metadata for XMRig configuration forms",
+  "version": "1.0.0",
+  "groups": [
+    {
+      "name": "pools",
+      "title": "Mining Pools",
+      "description": "Configure mining pool connections and failover settings",
+      "icon": "🌊",
+      "order": 1,
+      "collapsible": false,
+      "helpText": "Add one or more mining pools. The first pool is primary, others are backups."
+    },
+    {
+      "name": "cpu", 
+      "title": "CPU Settings",
+      "description": "CPU mining performance and thread configuration",
+      "icon": "🖥️",
+      "order": 2,
+      "collapsible": true,
+      "helpText": "Optimize CPU mining performance. Use 0 threads for automatic detection."
+    },
+    {
+      "name": "policies",
+      "title": "Automation Policies", 
+      "description": "Automated mining behavior rules and safety policies",
+      "icon": "🤖",
+      "order": 3,
+      "collapsible": true,
+      "helpText": "Configure automatic mining pausing/resuming based on device conditions."
+    },
+    {
+      "name": "telemetry",
+      "title": "Telemetry & Monitoring",
+      "description": "Data collection and performance monitoring settings", 
+      "icon": "📊",
+      "order": 4,
+      "collapsible": true,
+      "helpText": "Control how mining data is collected and stored."
+    },
+    {
+      "name": "advanced",
+      "title": "Advanced Settings",
+      "description": "Algorithm, donation, and other advanced options",
+      "icon": "⚙️", 
+      "order": 5,
+      "collapsible": true,
+      "helpText": "Advanced configuration options for experienced users."
+    }
+  ],
+  "fields": {
+    "pools": {
+      "displayType": "array",
+      "addButtonText": "Add Pool",
+      "removeButtonText": "Remove",
+      "emptyText": "No pools configured. Add at least one mining pool.",
+      "itemTemplate": {
+        "title": "Pool {{index + 1}}",
+        "subtitle": "{{hostname}}:{{port}}"
+      }
+    },
+    "pools.hostname": {
+      "title": "Pool Hostname",
+      "placeholder": "pool.example.com",
+      "hint": "Mining pool server address or IP",
+      "validation": "hostname",
+      "required": true,
+      "examples": [
+        "pool.xmr.pt", 
+        "xmr.pool.minergate.com",
+        "monerohash.com"
+      ]
+    },
+    "pools.port": {
+      "title": "Port",
+      "placeholder": "4444",
+      "hint": "Mining pool port number",
+      "inputType": "number",
+      "required": true,
+      "examples": [4444, 14433, 5555]
+    },
+    "pools.username": {
+      "title": "Username/Wallet",
+      "placeholder": "your.wallet.address",
+      "hint": "Pool username or your Monero wallet address",
+      "required": true,
+      "multiline": false
+    },
+    "pools.password": {
+      "title": "Password",
+      "placeholder": "x",
+      "hint": "Pool password (usually 'x' for wallet mining)",
+      "inputType": "password",
+      "showPasswordToggle": true
+    },
+    "pools.tls": {
+      "title": "Use TLS/SSL",
+      "hint": "Enable encrypted connection to pool",
+      "displayType": "switch"
+    },
+    "cpu.enabled": {
+      "title": "Enable CPU Mining", 
+      "hint": "Turn CPU mining on or off",
+      "displayType": "switch"
+    },
+    "cpu.threads": {
+      "title": "Thread Count",
+      "placeholder": "0",
+      "hint": "Number of CPU threads (0 = auto-detect)",
+      "inputType": "number",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "suffix": "threads"
+    },
+    "cpu.yield": {
+      "title": "Yield CPU", 
+      "hint": "Allow other processes to use CPU time",
+      "displayType": "switch"
+    },
+    "cpu.priority": {
+      "title": "Thread Priority",
+      "hint": "Mining thread priority (1=lowest, 5=highest)",
+      "displayType": "slider",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "marks": {
+        "1": "Lowest",
+        "3": "Normal", 
+        "5": "Highest"
+      }
+    },
+    "policies.thermal.enabled": {
+      "title": "Thermal Protection",
+      "hint": "Automatically pause mining when CPU gets too hot",
+      "displayType": "switch"
+    },
+    "policies.thermal.pauseThreshold": {
+      "title": "Pause Temperature",
+      "placeholder": "75",
+      "hint": "CPU temperature to pause mining",
+      "inputType": "number",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "suffix": "°C",
+      "dependsOn": "policies.thermal.enabled"
+    },
+    "policies.thermal.resumeThreshold": {
+      "title": "Resume Temperature", 
+      "placeholder": "65",
+      "hint": "CPU temperature to resume mining",
+      "inputType": "number",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "suffix": "°C",
+      "dependsOn": "policies.thermal.enabled"
+    },
+    "policies.battery.enabled": {
+      "title": "Battery Protection",
+      "hint": "Automatically pause mining on low battery",
+      "displayType": "switch"
+    },
+    "policies.battery.lowLevel": {
+      "title": "Low Battery Level",
+      "placeholder": "20",
+      "hint": "Battery percentage to pause mining",
+      "inputType": "number", 
+      "min": 5,
+      "max": 50,
+      "step": 1,
+      "suffix": "%",
+      "dependsOn": "policies.battery.enabled"
+    },
+    "policies.battery.resumeOnCharger": {
+      "title": "Resume on Charger",
+      "hint": "Resume mining when charger is connected",
+      "displayType": "switch",
+      "dependsOn": "policies.battery.enabled"
+    },
+    "telemetry.enabled": {
+      "title": "Enable Telemetry",
+      "hint": "Collect mining performance data",
+      "displayType": "switch"
+    },
+    "telemetry.interval": {
+      "title": "Collection Interval",
+      "placeholder": "2000",
+      "hint": "How often to collect data",
+      "inputType": "number",
+      "min": 1000,
+      "max": 60000,
+      "step": 1000,
+      "suffix": "ms",
+      "dependsOn": "telemetry.enabled"
+    },
+    "telemetry.historySize": {
+      "title": "History Size",
+      "placeholder": "512", 
+      "hint": "Number of samples to keep in memory",
+      "inputType": "number",
+      "min": 10,
+      "max": 10000,
+      "step": 10,
+      "suffix": "samples",
+      "dependsOn": "telemetry.enabled"
+    },
+    "donationPercent": {
+      "title": "Donation Percentage",
+      "placeholder": "1",
+      "hint": "Percentage of hashrate donated to XMRig development",
+      "inputType": "number",
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "suffix": "%",
+      "helpText": "Supporting XMRig development helps maintain and improve the software."
+    },
+    "algorithm": {
+      "title": "Mining Algorithm",
+      "hint": "Cryptocurrency algorithm to mine",
+      "displayType": "select",
+      "options": [
+        {"value": "rx/0", "label": "RandomX (Monero)", "description": "Default Monero algorithm"},
+        {"value": "rx/wow", "label": "RandomX (Wownero)", "description": "Wownero variant"},
+        {"value": "rx/loki", "label": "RandomX (Loki)", "description": "Loki variant"},
+        {"value": "cn/r", "label": "CryptoNight-R", "description": "Legacy CryptoNight"},
+        {"value": "cn/half", "label": "CryptoNight-Half", "description": "Half iteration variant"},
+        {"value": "cn/1", "label": "CryptoNight v1", "description": "Version 1"},
+        {"value": "cn/2", "label": "CryptoNight v2", "description": "Version 2"}
+      ]
+    },
+    "printTime": {
+      "title": "Report Interval",
+      "placeholder": "60",
+      "hint": "How often to print hashrate reports",
+      "inputType": "number",
+      "min": 10,
+      "max": 3600,
+      "step": 10,
+      "suffix": "seconds"
+    }
+  },
+  "validation": {
+    "custom": {
+      "thermalThresholds": {
+        "rule": "policies.thermal.resumeThreshold < policies.thermal.pauseThreshold",
+        "message": "Resume temperature must be lower than pause temperature"
+      },
+      "poolUnique": {
+        "rule": "unique(pools, 'hostname,port')",
+        "message": "Pool hostname and port combination must be unique"
+      }
+    }
+  },
+  "rendering": {
+    "theme": "dark",
+    "layout": "stacked",
+    "showGroupIcons": true,
+    "showFieldHints": true,
+    "showExamples": true,
+    "confirmOnReset": true,
+    "autoSave": false,
+    "previewMode": "diff"
+  }
+}

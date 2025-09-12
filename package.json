@@ -14,13 +14,23 @@
     "type": "git"
   },
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "export NODE_OPTIONS=--openssl-legacy-provider; react-native start",
     "test": "jest",
     "test:resnapshot": "jest -u",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "build:frontend": "yarn workspace @xmrig-for-android/ui-shared typecheck && yarn workspace dashboard-web build",
+    "dev:web": "yarn workspace dashboard-web dev",
+    "dev:mobile": "yarn start",
+    "lint:frontend": "yarn workspace @xmrig-for-android/ui-shared lint && yarn workspace dashboard-web lint",
+    "typecheck": "yarn workspace @xmrig-for-android/ui-shared typecheck && yarn workspace dashboard-web type-check"
   },
   "dependencies": {
     "@babel/preset-react": "^7.16.7",
