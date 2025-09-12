@@ -42,6 +42,7 @@ const initialState: ISettings = {
   },
   donation: 5,
   printTime: 60,
+  allowBackgroundMining: true, // Default true for backward compatibility
 };
 
 export const defaultConfiguration: Partial<IConfiguration> = {

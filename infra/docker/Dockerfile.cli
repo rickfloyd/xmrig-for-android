@@ -1,0 +1,318 @@
+# Multi-stage Dockerfile for XMRig CLI Headless Mining
+# Phase 1: Scaffold for future headless/container deployment
+# TODO PHASE3: Implement full headless daemon functionality
+
+# Build stage - XMRig compilation
+FROM ubuntu:22.04 AS builder
+
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    libuv1-dev \
+    libssl-dev \
+    libhwloc-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /build
+
+# TODO PHASE3: Clone and build XMRig
+# For now, this is a placeholder structure
+RUN echo "TODO PHASE3: XMRig compilation will be implemented here" > README.txt
+RUN echo "This stage will:" >> README.txt
+RUN echo "1. Clone XMRig source from official repository" >> README.txt
+RUN echo "2. Configure CMake build for headless operation" >> README.txt
+RUN echo "3. Compile optimized binary for container deployment" >> README.txt
+RUN echo "4. Strip debug symbols for minimal size" >> README.txt
+
+# Placeholder for future XMRig binary
+RUN mkdir -p /build/bin
+RUN echo '#!/bin/bash\necho "XMRig placeholder - TODO PHASE3"\nexit 1' > /build/bin/xmrig
+RUN chmod +x /build/bin/xmrig
+
+# Runtime stage - minimal container for deployment
+FROM ubuntu:22.04 AS runtime
+
+# Install runtime dependencies only
+RUN apt-get update && apt-get install -y \
+    libuv1 \
+    libssl3 \
+    libhwloc15 \
+    curl \
+    jq \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create non-root user for security
+RUN groupadd -r xmrig && useradd -r -g xmrig xmrig
+
+# Set up application directory
+WORKDIR /app
+
+# Copy XMRig binary from builder stage
+COPY --from=builder /build/bin/xmrig /usr/local/bin/xmrig
+COPY --from=builder /build/README.txt /app/
+
+# Create configuration directory
+RUN mkdir -p /app/config /app/logs \
+    && chown -R xmrig:xmrig /app
+
+# Default configuration template
+RUN cat > /app/config/config.json.template << 'EOF'
+{
+    "api": {
+        "id": null,
+        "worker-id": null
+    },
+    "http": {
+        "enabled": true,
+        "host": "0.0.0.0",
+        "port": 18080,
+        "access-token": "${XMRIG_ACCESS_TOKEN}",
+        "restricted": false
+    },
+    "autosave": true,
+    "background": false,
+    "colors": true,
+    "title": "XMRig for Android - Headless",
+    "randomx": {
+        "init": -1,
+        "mode": "auto",
+        "1gb-pages": false,
+        "rdmsr": true,
+        "wrmsr": true,
+        "cache_qos": false,
+        "numa": true,
+        "scratchpad_prefetch_mode": 1
+    },
+    "cpu": {
+        "enabled": true,
+        "huge-pages": true,
+        "huge-pages-jit": false,
+        "hw-aes": null,
+        "priority": null,
+        "memory-pool": false,
+        "yield": true,
+        "max-threads-hint": 75,
+        "asm": true,
+        "argon2-impl": null,
+        "cn/0": false,
+        "cn-lite/0": false
+    },
+    "opencl": {
+        "enabled": false,
+        "cache": true,
+        "loader": null,
+        "platform": "AMD",
+        "adl": true,
+        "cn/0": false,
+        "cn-lite/0": false
+    },
+    "cuda": {
+        "enabled": false,
+        "loader": null,
+        "nvml": true,
+        "cn/0": false,
+        "cn-lite/0": false
+    },
+    "donate-level": 1,
+    "donate-over-proxy": 1,
+    "log-file": "/app/logs/xmrig.log",
+    "pools": [
+        {
+            "algo": null,
+            "coin": null,
+            "url": "${POOL_URL}",
+            "user": "${WALLET_ADDRESS}",
+            "pass": "${WORKER_NAME}",
+            "rig-id": "${RIG_ID}",
+            "nicehash": false,
+            "keepalive": false,
+            "enabled": true,
+            "tls": false,
+            "tls-fingerprint": null,
+            "daemon": false,
+            "socks5": null,
+            "self-select": null,
+            "submit-to-origin": false
+    }
+    ],
+    "print-time": 60,
+    "health-print-time": 60,
+    "dmi": true,
+    "retries": 5,
+    "retry-pause": 5,
+    "syslog": false,
+    "tls": {
+        "enabled": false,
+        "protocols": null,
+        "cert": null,
+        "cert_key": null,
+        "ciphers": null,
+        "ciphersuites": null,
+        "dhparam": null
+    },
+    "user-agent": null,
+    "verbose": 0,
+    "watch": true,
+    "pause-on-battery": false,
+    "pause-on-active": false
+}
+EOF
+
+# Environment variable substitution script
+RUN cat > /app/substitute-env.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+# Default values
+export POOL_URL="${POOL_URL:-pool.monero.com:4444}"
+export WALLET_ADDRESS="${WALLET_ADDRESS:-}"
+export WORKER_NAME="${WORKER_NAME:-headless-miner}"
+export RIG_ID="${RIG_ID:-docker-$(hostname)}"
+export XMRIG_ACCESS_TOKEN="${XMRIG_ACCESS_TOKEN:-headless-token}"
+
+# Check required variables
+if [ -z "$WALLET_ADDRESS" ]; then
+    echo "ERROR: WALLET_ADDRESS environment variable is required"
+    exit 1
+fi
+
+# Substitute environment variables in config template
+envsubst < /app/config/config.json.template > /app/config/config.json
+
+echo "Configuration generated:"
+echo "  Pool: $POOL_URL"
+echo "  Wallet: ${WALLET_ADDRESS:0:8}..."
+echo "  Worker: $WORKER_NAME"
+echo "  Rig ID: $RIG_ID"
+EOF
+
+RUN chmod +x /app/substitute-env.sh
+
+# Health check script
+RUN cat > /app/healthcheck.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+# Check if XMRig process is running
+if ! pgrep -f xmrig > /dev/null; then
+    echo "ERROR: XMRig process not found"
+    exit 1
+fi
+
+# Check HTTP API if enabled
+if [ "${ENABLE_HTTP_API:-true}" = "true" ]; then
+    API_PORT="${API_PORT:-18080}"
+    API_TOKEN="${XMRIG_ACCESS_TOKEN:-headless-token}"
+    
+    # Test API endpoint
+    if ! curl -s -H "Authorization: Bearer $API_TOKEN" \
+         "http://localhost:$API_PORT/1/summary" > /dev/null; then
+        echo "ERROR: XMRig API not responding"
+        exit 1
+    fi
+fi
+
+echo "XMRig is healthy"
+exit 0
+EOF
+
+RUN chmod +x /app/healthcheck.sh
+
+# Startup script
+RUN cat > /app/start.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+echo "Starting XMRig for Android - Headless Mode"
+echo "Phase 1 Scaffold - TODO PHASE3: Implement actual functionality"
+
+# Generate configuration from environment variables
+/app/substitute-env.sh
+
+# TODO PHASE3: Start actual XMRig process
+echo "TODO PHASE3: XMRig binary will be started here"
+echo "Command would be: xmrig --config=/app/config/config.json"
+
+# For now, just show what would happen
+echo "Configuration that would be used:"
+cat /app/config/config.json | jq '.'
+
+echo "Container would now run XMRig in headless mode..."
+echo "Logs would be written to /app/logs/xmrig.log"
+echo "HTTP API would be available on port 18080"
+
+# Keep container running for demo purposes
+sleep infinity
+EOF
+
+RUN chmod +x /app/start.sh
+
+# Switch to non-root user
+USER xmrig
+
+# Expose HTTP API port
+EXPOSE 18080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["/app/healthcheck.sh"]
+
+# Default environment variables
+ENV POOL_URL="pool.monero.com:4444"
+ENV WORKER_NAME="headless-miner"
+ENV ENABLE_HTTP_API="true"
+ENV API_PORT="18080"
+
+# Volume for persistent logs and configuration
+VOLUME ["/app/logs", "/app/config"]
+
+# Labels for metadata
+LABEL org.opencontainers.image.title="XMRig for Android - Headless"
+LABEL org.opencontainers.image.description="Containerized XMRig mining for headless deployments"
+LABEL org.opencontainers.image.version="0.1.0-phase1"
+LABEL org.opencontainers.image.vendor="XMRig for Android Project"
+LABEL org.opencontainers.image.source="https://github.com/XMRig-for-Android/xmrig-for-android"
+LABEL org.opencontainers.image.documentation="https://github.com/XMRig-for-Android/xmrig-for-android/tree/main/docs"
+
+# Start the application
+CMD ["/app/start.sh"]
+
+# Build instructions for future reference:
+# 
+# Phase 1 (Current - Scaffold):
+# docker build -f infra/docker/Dockerfile.cli -t xmrig-android:phase1 .
+# 
+# Phase 3 (Future - Full Implementation):
+# docker build -f infra/docker/Dockerfile.cli -t xmrig-android:latest .
+# docker run -d \
+#   --name xmrig-headless \
+#   -e WALLET_ADDRESS="your-wallet-address" \
+#   -e POOL_URL="pool.example.com:4444" \
+#   -e WORKER_NAME="my-headless-miner" \
+#   -p 18080:18080 \
+#   -v xmrig-logs:/app/logs \
+#   xmrig-android:latest
+#
+# Environment Variables:
+# - WALLET_ADDRESS: Your Monero wallet address (required)
+# - POOL_URL: Mining pool URL and port (default: pool.monero.com:4444)
+# - WORKER_NAME: Worker identifier (default: headless-miner)
+# - RIG_ID: Unique rig identifier (default: docker-<hostname>)
+# - XMRIG_ACCESS_TOKEN: HTTP API access token (default: headless-token)
+# - ENABLE_HTTP_API: Enable HTTP API (default: true)
+# - API_PORT: HTTP API port (default: 18080)
+#
+# Volumes:
+# - /app/logs: XMRig log files
+# - /app/config: Configuration files
+#
+# Ports:
+# - 18080: HTTP API for monitoring and control

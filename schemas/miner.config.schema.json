@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schemaVersion": "1.0.0",
+  "title": "XMRig Configuration Schema",
+  "description": "Schema for XMRig miner configuration validation and documentation",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Configuration schema version",
+      "default": "1.0.0"
+    },
+    "api": {
+      "type": "object",
+      "description": "HTTP API configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "host": {
+          "type": "string",
+          "default": "127.0.0.1"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 50080
+        },
+        "access-token": {
+          "type": "string",
+          "description": "Bearer token for API access"
+        }
+      }
+    },
+    "pools": {
+      "type": "array",
+      "description": "Mining pool configurations",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Pool URL in format: pool.example.com:port"
+          },
+          "user": {
+            "type": "string",
+            "description": "Wallet address or username"
+          },
+          "pass": {
+            "type": "string",
+            "description": "Pool password or worker name",
+            "default": "x"
+          },
+          "rig-id": {
+            "type": "string",
+            "description": "Rig identifier"
+          },
+          "tls": {
+            "type": "boolean",
+            "description": "Enable TLS/SSL connection",
+            "default": false
+          }
+        },
+        "required": ["url", "user"]
+      }
+    },
+    "cpu": {
+      "type": "object",
+      "description": "CPU mining configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "threads": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of mining threads"
+        },
+        "max-threads-hint": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Percentage of CPU threads to use"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Thread priority level"
+        },
+        "yield": {
+          "type": "boolean",
+          "description": "Yield CPU to other processes",
+          "default": true
+        }
+      }
+    },
+    "donate-level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25,
+      "description": "Donation percentage (1-25%)",
+      "default": 5
+    },
+    "print-time": {
+      "type": "integer",
+      "minimum": 10,
+      "maximum": 3600,
+      "description": "Hashrate report interval in seconds",
+      "default": 60
+    },
+    "randomx": {
+      "type": "object",
+      "description": "RandomX algorithm configuration",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["auto", "fast", "light"],
+          "description": "RandomX mode selection",
+          "default": "auto"
+        },
+        "init": {
+          "type": "integer",
+          "minimum": -1,
+          "description": "RandomX dataset init threads (-1 for auto)"
+        }
+      }
+    },
+    "log-level": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "Log verbosity level (0=emergency, 5=debug)",
+      "default": 1
+    },
+    "background": {
+      "type": "boolean",
+      "description": "Run in background mode",
+      "default": false
+    },
+    "title": {
+      "type": "string",
+      "description": "Set custom title for the process"
+    },
+    "user-agent": {
+      "type": "string",
+      "description": "Custom User-Agent string for pool connections"
+    }
+  },
+  "required": ["pools"],
+  "additionalProperties": true
+}
