@@ -1,0 +1,212 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XMRig Configuration Schema",
+  "description": "JSON schema for XMRig for Android configuration files",
+  "type": "object",
+  "properties": {
+    "pools": {
+      "type": "array",
+      "description": "Mining pool configurations",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hostname": {
+            "type": "string",
+            "description": "Pool server hostname or IP address",
+            "examples": ["pool.xmr.pt", "xmr.pool.minergate.com"]
+          },
+          "port": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535,
+            "description": "Pool server port number",
+            "examples": [4444, 14433]
+          },
+          "username": {
+            "type": "string", 
+            "description": "Pool username or wallet address",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "description": "Pool password (optional)",
+            "default": "x"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether this pool is enabled",
+            "default": true
+          },
+          "tls": {
+            "type": "boolean",
+            "description": "Use TLS/SSL connection",
+            "default": false
+          }
+        },
+        "required": ["hostname", "port", "username"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "cpu": {
+      "type": "object",
+      "description": "CPU mining configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable CPU mining",
+          "default": true
+        },
+        "threads": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of CPU threads to use (0 = auto)",
+          "default": 0
+        },
+        "yield": {
+          "type": "boolean",
+          "description": "Yield CPU to other processes",
+          "default": true
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Thread priority (1-5, 3=normal)",
+          "default": 3
+        },
+        "asm": {
+          "type": "boolean",
+          "description": "Enable assembly optimizations",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "policies": {
+      "type": "object",
+      "description": "Automated mining behavior policies",
+      "properties": {
+        "thermal": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable thermal protection",
+              "default": true
+            },
+            "pauseThreshold": {
+              "type": "number",
+              "minimum": 40,
+              "maximum": 100,
+              "description": "Temperature to pause mining (°C)",
+              "default": 75
+            },
+            "resumeThreshold": {
+              "type": "number",
+              "minimum": 40,
+              "maximum": 100,
+              "description": "Temperature to resume mining (°C)",
+              "default": 65
+            }
+          },
+          "additionalProperties": false
+        },
+        "battery": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable battery protection",
+              "default": true
+            },
+            "lowLevel": {
+              "type": "number",
+              "minimum": 5,
+              "maximum": 50,
+              "description": "Battery level to pause mining (%)",
+              "default": 20
+            },
+            "resumeOnCharger": {
+              "type": "boolean",
+              "description": "Resume mining when charger connected",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "performance": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable performance optimization",
+              "default": false
+            },
+            "minHashrate": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Minimum acceptable hashrate (H/s)",
+              "default": 100
+            },
+            "adaptiveThreads": {
+              "type": "boolean",
+              "description": "Automatically adjust thread count",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "telemetry": {
+      "type": "object",
+      "description": "Telemetry and monitoring configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable telemetry collection",
+          "default": true
+        },
+        "interval": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "Telemetry collection interval (ms)",
+          "default": 2000
+        },
+        "historySize": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 10000,
+          "description": "Number of samples to keep in memory",
+          "default": 512
+        }
+      },
+      "additionalProperties": false
+    },
+    "donationPercent": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Percentage of hashrate donated to XMRig development",
+      "default": 1
+    },
+    "algorithm": {
+      "type": "string",
+      "description": "Mining algorithm",
+      "enum": ["rx/0", "rx/wow", "rx/loki", "cn/r", "cn/half", "cn/1", "cn/2"],
+      "default": "rx/0"
+    },
+    "printTime": {
+      "type": "integer",
+      "minimum": 10,
+      "maximum": 3600,
+      "description": "Hashrate report interval (seconds)",
+      "default": 60
+    }
+  },
+  "required": ["pools"],
+  "additionalProperties": false
+}

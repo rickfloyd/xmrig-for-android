@@ -153,3 +153,11 @@ xmrig/lib-builder/build
 *.hprof
 android/local.properties
 private/*
+
+# Workspace build artifacts
+packages/*/dist/
+packages/*/build/
+apps/*/dist/
+apps/*/build/
+apps/*/.next/
+apps/*/out/
