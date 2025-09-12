@@ -4,6 +4,7 @@ import { NativeModules } from 'react-native';
 import { SettingsContext } from '../settings';
 import { Configuration } from '../settings/settings.interface';
 import ConfigBuilder from '../xmrig-config/config-builder';
+import { DefaultDonationInfoProvider } from '../providers';
 
 const { XMRigForAndroid } = NativeModules;
 
@@ -17,6 +18,12 @@ export interface IMinerSendCompiguration {
 
 export const useMiner = () => {
   const { settings } = React.useContext(SettingsContext);
+
+  // TODO PHASE2: Replace with PolicyOrchestrator injection for adaptive donation
+  const donationProvider = React.useMemo(
+    () => new DefaultDonationInfoProvider(settings),
+    [settings],
+  );
 
   const startHandler = React.useCallback((config: IMinerSendCompiguration) => {
     XMRigForAndroid.start(JSON.stringify(config));
@@ -36,7 +43,7 @@ export const useMiner = () => {
             ['id', 'name', 'mode', 'xmrig_fork'],
           );
           sConfig.setProps({
-            'donate-level': settings.donation,
+            'donate-level': donationProvider.getDonationPercent(),
             'print-time': settings.printTime,
           });
 
@@ -47,7 +54,7 @@ export const useMiner = () => {
         }
       }
     }
-  }, [settings]);
+  }, [settings, donationProvider, startHandler]);
 
   const stopHandler = React.useCallback(() => {
     XMRigForAndroid.stop();

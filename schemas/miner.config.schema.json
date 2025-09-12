@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/rickfloyd/xmrig-for-android/schemas/miner.config.schema.json",
+  "title": "XMRig for Android Miner Configuration",
+  "description": "JSON schema for validating XMRig miner configuration files",
+  "type": "object",
+  "properties": {
+    "api": {
+      "type": "object",
+      "properties": {
+        "id": { "type": ["string", "null"] },
+        "worker-id": { "type": ["string", "null"] }
+      }
+    },
+    "http": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "host": { "type": "string" },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "access-token": { "type": ["string", "null"] },
+        "restricted": { "type": "boolean" }
+      }
+    },
+    "autosave": { "type": "boolean" },
+    "background": { "type": "boolean" },
+    "colors": { "type": "boolean" },
+    "title": { "type": "boolean" },
+    "randomx": {
+      "type": "object",
+      "properties": {
+        "init": { "type": "integer" },
+        "init-avx2": { "type": "integer" },
+        "mode": { "type": "string", "enum": ["auto", "fast", "light"] },
+        "1gb-pages": { "type": "boolean" },
+        "rdmsr": { "type": "boolean" },
+        "wrmsr": { "type": "boolean" },
+        "cache_qos": { "type": "boolean" },
+        "numa": { "type": "boolean" },
+        "scratchpad_prefetch_mode": { "type": "integer" }
+      }
+    },
+    "cpu": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "huge-pages": { "type": "boolean" },
+        "huge-pages-jit": { "type": "boolean" },
+        "hw-aes": { "type": ["boolean", "null"] },
+        "priority": { "type": "integer" },
+        "memory-pool": { "type": "boolean" },
+        "yield": { "type": "boolean" },
+        "max-threads-hint": { "type": "integer", "minimum": 1 },
+        "asm": { "type": "boolean" },
+        "argon2-impl": { "type": ["string", "null"] },
+        "astrobwt-max-size": { "type": "integer" },
+        "astrobwt-avx2": { "type": "boolean" }
+      }
+    },
+    "opencl": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "cache": { "type": "boolean" },
+        "loader": { "type": ["string", "null"] },
+        "platform": { "type": "string" },
+        "adl": { "type": "boolean" }
+      }
+    },
+    "cuda": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "loader": { "type": ["string", "null"] },
+        "nvml": { "type": "boolean" }
+      }
+    },
+    "donate-level": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "donate-over-proxy": { "type": "integer" },
+    "log-file": { "type": ["string", "null"] },
+    "pools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "algo": { "type": ["string", "null"] },
+          "coin": { "type": ["string", "null"] },
+          "url": { "type": "string" },
+          "user": { "type": "string" },
+          "pass": { "type": "string" },
+          "rig-id": { "type": ["string", "null"] },
+          "nicehash": { "type": "boolean" },
+          "keepalive": { "type": "boolean" },
+          "enabled": { "type": "boolean" },
+          "tls": { "type": "boolean" },
+          "tls-fingerprint": { "type": ["string", "null"] },
+          "daemon": { "type": "boolean" },
+          "socks5": { "type": ["string", "null"] },
+          "self-select": { "type": ["string", "null"] },
+          "submit-to-origin": { "type": "boolean" }
+        },
+        "required": ["url", "user"]
+      }
+    },
+    "print-time": { "type": "integer", "minimum": 0 },
+    "health-print-time": { "type": "integer", "minimum": 0 },
+    "dmi": { "type": "boolean" },
+    "retries": { "type": "integer", "minimum": 0 },
+    "retry-pause": { "type": "integer", "minimum": 0 },
+    "syslog": { "type": "boolean" },
+    "tls": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "protocols": { "type": ["string", "null"] },
+        "cert": { "type": ["string", "null"] },
+        "cert_key": { "type": ["string", "null"] },
+        "ciphers": { "type": ["string", "null"] },
+        "ciphersuites": { "type": ["string", "null"] },
+        "dhparam": { "type": ["string", "null"] }
+      }
+    },
+    "user-agent": { "type": ["string", "null"] },
+    "verbose": { "type": "integer", "minimum": 0 },
+    "watch": { "type": "boolean" },
+    "rebench-algo": { "type": "boolean" },
+    "bench-algo-time": { "type": "integer", "minimum": 0 },
+    "pause-on-battery": { "type": "boolean" },
+    "pause-on-active": { "type": "boolean" }
+  },
+  "required": ["pools"]
+}
