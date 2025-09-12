@@ -53,6 +53,9 @@ jobs:
     - run: yarn
     - run: node update_version.js
     
+    - name: Validate Schemas
+      run: yarn schema:validate
+    
     - name: Build XMRig, libUV, OpenSSL & hwloc
       run: cd xmrig/lib-builder && mkdir build && mkdir build/src && mkdir build/build && make all && cd .. && cd .. 
         

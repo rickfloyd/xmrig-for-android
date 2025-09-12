@@ -35,15 +35,19 @@ public class MiningService extends Service {
     private Notification.Builder notificationbuilder;
     private Process process;
     private OutputReaderThread outputHandler;
+    private PowerManager.WakeLock wakeLock;
 
     private final String ansiRegex = "\\e\\[[\\d;]*[^\\d;]";
     private final Pattern ansiRegexPattern = Pattern.compile(ansiRegex);
+    
+    // TODO PHASE2: Connect to PolicyOrchestrator for background mining policy
+    private boolean allowBackgroundMining = true; // Default to true for compatibility
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        Intent notificationIntent = new Intent(this, MiningService.class);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE);
 
@@ -107,13 +111,56 @@ public class MiningService extends Service {
             process = null;
             Log.i(LOG_TAG, "stopped");
         }
+        // Release wake lock when stopping
+        releaseWakeLock();
+    }
+
+    /**
+     * Acquires wake lock with logging and background mining guard.
+     * Returns early if background mining is not allowed.
+     * 
+     * @return true if wake lock was acquired, false if skipped
+     */
+    private boolean acquireWakeLock() {
+        if (!allowBackgroundMining) {
+            Log.i(LOG_TAG, "Background mining disabled, skipping wake lock acquisition");
+            return false;
+        }
+
+        try {
+            PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+            wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    "XMRigForAndroid::MinerWakeLock");
+            wakeLock.acquire();
+            Log.d(LOG_TAG, "Wake lock acquired for background mining");
+            return true;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Failed to acquire wake lock", e);
+            return false;
+        }
+    }
+
+    /**
+     * Releases wake lock if held.
+     */
+    private void releaseWakeLock() {
+        if (wakeLock != null && wakeLock.isHeld()) {
+            try {
+                wakeLock.release();
+                Log.d(LOG_TAG, "Wake lock released");
+            } catch (Exception e) {
+                Log.w(LOG_TAG, "Error releasing wake lock", e);
+            }
+            wakeLock = null;
+        }
     }
 
     public void startMining(String configPath, String xmrigFork) {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                "XMRigForAndroid::MinerWakeLock");
-        wakeLock.acquire();
+        // Acquire wake lock with logging and guard
+        if (!acquireWakeLock()) {
+            Log.w(LOG_TAG, "Cannot start mining: wake lock acquisition failed or background mining disabled");
+            // Continue anyway for now - TODO PHASE2: Implement proper background policy
+        }
 
         Log.i(LOG_TAG, "starting...");
         if (process != null) {
@@ -150,7 +197,7 @@ public class MiningService extends Service {
         } catch (Exception e) {
             Log.e(LOG_TAG, "exception:", e);
             process = null;
-            wakeLock.release();
+            releaseWakeLock();
         }
 
     }

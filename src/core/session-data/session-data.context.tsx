@@ -144,6 +144,7 @@ export const SessionDataContextProvider:React.FC = ({ children }) => {
       });
     }
     if (settings.power.pauseOnLowBattery && isLowBattery === true) {
+      // TODO PHASE2: Hook PolicyOrchestrator for battery pause policy
       pauseMiner();
     } else if (settings.power.resumeOnBatteryOk && isLowBattery === false) {
       resumeMiner();
@@ -185,6 +186,7 @@ export const SessionDataContextProvider:React.FC = ({ children }) => {
         && cpuTemperature > settings.thermal.pauseOnCPUTemperatureOverHeatValue
         && workingState === WorkingState.MINING
       ) {
+        // TODO PHASE2: Hook PolicyOrchestrator for thermal throttle policy
         pauseMiner();
       } else if (
         settings.thermal.resumeCPUTemperatureNormal
@@ -195,6 +197,18 @@ export const SessionDataContextProvider:React.FC = ({ children }) => {
       }
     }
   }, [cpuTemperature]);
+
+  // TODO PHASE2: Add AppState listener for background/foreground events
+  // React.useEffect(() => {
+  //   const handleAppStateChange = (nextAppState: string) => {
+  //     if (nextAppState === 'background') {
+  //       Log.d('SessionData', 'App moved to background');
+  //       // Hook PolicyOrchestrator for background mining policy
+  //     }
+  //   };
+  //   AppState.addEventListener('change', handleAppStateChange);
+  //   return () => AppState.removeEventListener('change', handleAppStateChange);
+  // }, []);
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
