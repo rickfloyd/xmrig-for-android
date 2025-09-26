@@ -9,9 +9,30 @@
 
 #pragma once
 
-#include <ReactCommon/TurboModule.h>
-#include <react/jni/ReadableNativeMap.h>
-#include <react/jni/WritableNativeMap.h>
+// Mock React Native headers for development IntelliSense
+// These will be replaced with actual React Native headers during build
+#include <jni.h>
+#include <memory>
+#include <string>
+
+// Mock TurboModule interface for development
+namespace facebook {
+namespace react {
+class TurboModule {
+public:
+    virtual ~TurboModule() = default;
+};
+class ReadableNativeMap {
+public:
+    virtual ~ReadableNativeMap() = default;
+};
+class WritableNativeMap {
+public:
+    virtual ~WritableNativeMap() = default;
+};
+} // namespace react
+} // namespace facebook
+
 #include "trading_anarchy_jni.h"
 
 namespace TradingAnarchy {

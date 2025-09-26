@@ -1,22 +1,37 @@
 {
+    "version": 4,
     "configurations": [
         {
-            "name": "Win32",
+            "name": "Trading Anarchy Development",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}"
+                "${workspaceFolder}/android",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/src/modules",
+                "${workspaceFolder}/src/types"
             ],
             "defines": [
+                "ANDROID=1",
+                "__ANDROID__=1",
+                "__ANDROID_API__=35",
+                "TRADING_ANARCHY_VERSION=\"2025.1.0\"",
+                "MODERN_CPP_23=1",
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE",
-                "ANDROID",
-                "__ANDROID_API__=24"
+                "_UNICODE"
             ],
             "cStandard": "c17",
             "cppStandard": "c++23",
-            "intelliSenseMode": "windows-msvc-x64"
+            "intelliSenseMode": "windows-msvc-x64",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${workspaceFolder}/android",
+                    "${workspaceFolder}/src"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+            }
         }
-    ],
-    "version": 4
+    ]
 }

@@ -8,10 +8,18 @@
  */
 
 #include "trading_anarchy_native_module.h"
-#include <react/jni/JReactMarker.h>
-#include <react/jni/JRuntimeExecutor.h>
-#include <react/renderer/runtimescheduler/RuntimeScheduler.h>
-#include <jsi/jsi.h>
+// Mock React Native headers for development IntelliSense
+// These will be replaced with actual React Native headers during build
+#include <jni.h>
+#include <memory>
+#include <string>
+// Mock JSI interface for development
+namespace facebook {
+namespace jsi {
+class Runtime {};
+class Value {};
+} // namespace jsi
+} // namespace facebook
 #include <sstream>
 #include <iomanip>
 

@@ -1,0 +1,64 @@
+{
+  "configurations": [
+    {
+      "name": "Android Development",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/android/app/src/main/cpp",
+        "${workspaceFolder}/android/app/src/main/cpp/include",
+        "${workspaceFolder}/xmrig/lib-builder/script/src",
+        "C:/Users/forex/AppData/Local/Android/Sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include",
+        "C:/Users/forex/AppData/Local/Android/Sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/aarch64-linux-android",
+        "C:/Users/forex/AppData/Local/Android/Sdk/ndk/27.2.12479018/sources/cxx-stl/llvm-libc++/include",
+        "C:/Users/forex/AppData/Local/Android/Sdk/ndk/27.2.12479018/sources/android/native_app_glue",
+        "C:/Users/forex/AppData/Local/Android/Sdk/ndk/27.2.12479018/sources/android/cpufeatures/include"
+      ],
+      "defines": [
+        "ANDROID",
+        "ANDROID_NDK",
+        "__ANDROID_API__=24",
+        "_FORTIFY_SOURCE=2",
+        "NDEBUG"
+      ],
+      "compilerPath": "C:/Users/forex/AppData/Local/Android/Sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android24-clang++.exe",
+      "cStandard": "c17",
+      "cppStandard": "c++23",
+      "intelliSenseMode": "clang-x64",
+      "compileCommands": "${workspaceFolder}/android/app/.cxx/Debug/arm64-v8a/compile_commands.json",
+      "browse": {
+        "path": [
+          "${workspaceFolder}/**",
+          "C:/Users/forex/AppData/Local/Android/Sdk/ndk/27.2.12479018/**"
+        ],
+        "limitSymbolsToIncludedHeaders": true
+      }
+    },
+    {
+      "name": "Windows Development",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/android/app/src/main/cpp",
+        "${workspaceFolder}/android/app/src/main/cpp/include",
+        "${workspaceFolder}/xmrig/lib-builder/script/src",
+        "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/include",
+        "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/ucrt",
+        "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/shared",
+        "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/um",
+        "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/winrt"
+      ],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE",
+        "WIN32",
+        "_WIN64",
+        "_WINDOWS"
+      ],
+      "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/bin/Hostx64/x64/cl.exe",
+      "cStandard": "c17",
+      "cppStandard": "c++23",
+      "intelliSenseMode": "windows-msvc-x64"
+    }
+  ],
+  "version": 4
+}
