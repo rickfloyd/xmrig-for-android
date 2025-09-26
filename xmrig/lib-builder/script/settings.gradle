@@ -1,0 +1,43 @@
+/*
+ * =============================================
+ * Trading Anarchy Android Compute Engine
+ * Settings Configuration - Project Structure
+ * Copyright (c) 2025 Trading Anarchy. All rights reserved.
+ * Version: 2025.1.0 - Professional Settings
+ * =============================================
+ */
+
+rootProject.name = 'TradingAnarchyComputeEngine'
+include ':app'
+
+// Enhanced plugin management
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id 'com.android.application' version '8.8.0'
+        id 'org.jetbrains.kotlin.android' version '2.1.0'
+    }
+}
+
+// Professional dependency resolution
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+// Enhanced build cache
+buildCache {
+    local {
+        enabled = true
+        directory = new File(rootDir, 'build-cache')
+        removeUnusedEntriesAfterDays = 30
+    }
+}

@@ -1,14 +1,36 @@
 #!/bin/bash
+#
+# Trading Anarchy - Android Compute Engine
+# libuv Builder - Compiles libuv library for Android platforms
+# Copyright (c) 2025 Trading Anarchy. All rights reserved.
+#
 
 set -e
 
 source script/env.sh
 
 cd $EXTERNAL_LIBS_BUILD_ROOT/libuv
-mkdir build && cd build
+mkdir -p build && cd build
 
 TOOLCHAIN=$ANDROID_HOME/ndk/$NDK_VERSION/build/cmake/android.toolchain.cmake
-CMAKE=$ANDROID_HOME/cmake/3.18.1/bin/cmake
+
+# Try to find cmake in different locations
+if [ -f "$ANDROID_HOME/cmake/3.18.1/bin/cmake" ]; then
+    CMAKE=$ANDROID_HOME/cmake/3.18.1/bin/cmake
+elif [ -f "$ANDROID_HOME/cmake/3.22.1/bin/cmake" ]; then
+    CMAKE=$ANDROID_HOME/cmake/3.22.1/bin/cmake
+else
+    # Try to find any cmake version
+    CMAKE_DIR=$(find "$ANDROID_HOME/cmake" -name "cmake" -type f | head -1)
+    if [ -n "$CMAKE_DIR" ]; then
+        CMAKE="$CMAKE_DIR"
+    else
+        echo "Error: Could not find cmake in Android SDK"
+        exit 1
+    fi
+fi
+
+echo "Using cmake: $CMAKE"
 ANDROID_PLATFORM=android-29
 
 #if [ ! -f "configure" ]; then

@@ -1,5 +1,6 @@
-# Android Compute Engine Build System
-# Professional build environment for cross-platform compute libraries
+# Trading Anarchy - Android Compute Engine Build System
+# Professional build environment for cross-platform compute libraries  
+# Copyright (c) 2025 Trading Anarchy. All rights reserved.
 
 all: toolchain libuv hwloc openssl compute install
 

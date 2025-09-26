@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================
+  Trading Anarchy Android Compute Engine
+  Android Manifest - Professional Android App Configuration
+  Copyright (c) 2025 Trading Anarchy. All rights reserved.
+  Version: 2025.1.0 - Android API 35 with Enhanced Security
+  =============================================
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.tradinganarchy.computeengine">
+
+    <!-- ========================================= -->
+    <!-- PROFESSIONAL ANDROID API REQUIREMENTS     -->
+    <!-- ========================================= -->
+    <uses-sdk 
+        android:minSdkVersion="24" 
+        android:targetSdkVersion="35" 
+        android:compileSdkVersion="35" />
+
+    <!-- ========================================= -->
+    <!-- ENHANCED HARDWARE FEATURE REQUIREMENTS    -->
+    <!-- ========================================= -->
+    <!-- Professional CPU Architecture Support -->
+    <uses-feature
+        android:name="android.hardware.cpu.arm64"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.cpu.neon"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.cpu.aes"
+        android:required="false" />
+    
+    <!-- Enhanced OpenGL Support for GPU Compute -->
+    <uses-feature
+        android:glEsVersion="0x00030000"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.opengles.aep"
+        android:required="false" />
+    
+    <!-- Professional Performance Features -->
+    <uses-feature
+        android:name="android.hardware.ram.high"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.performance_tuned"
+        android:required="false" />
+
+    <!-- ========================================= -->
+    <!-- COMPREHENSIVE PERMISSION REQUIREMENTS     -->
+    <!-- ========================================= -->
+    <!-- Essential Network Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    
+    <!-- Professional System Permissions -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    
+    <!-- Enhanced Performance Monitoring -->
+    <uses-permission android:name="android.permission.DUMP" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" 
+        tools:ignore="ProtectedPermissions" />
+    
+    <!-- Professional Storage Permissions -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    
+    <!-- 2025 Enhanced Privacy Permissions -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" 
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" 
+        tools:ignore="QueryAllPackagesPermission" />
+    
+    <!-- Professional Development & Debugging -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    
+    <!-- Enhanced Battery Optimization Control -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.DEVICE_POWER" 
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- ========================================= -->
+    <!-- PROFESSIONAL APPLICATION CONFIGURATION    -->
+    <!-- ========================================= -->
+    <application
+        android:name=".MainApplication"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/AppTheme"
+        android:allowBackup="true"
+        android:allowClearUserData="true"
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="false"
+        android:preserveLegacyExternalStorage="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:appCategory="productivity"
+        tools:targetApi="35">
+
+        <!-- ===================================== -->
+        <!-- ENHANCED MAIN ACTIVITY CONFIGURATION  -->
+        <!-- ===================================== -->
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+            android:windowSoftInputMode="adjustResize"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:enableOnBackInvokedCallback="true">
+            
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <!-- Professional Deep Link Support -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="tradinganarchy" 
+                      android:host="compute" />
+            </intent-filter>
+            
+            <!-- Enhanced File Association -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/json" />
+            </intent-filter>
+            
+        </activity>
+
+        <!-- ===================================== -->
+        <!-- PROFESSIONAL COMPUTE ENGINE SERVICE   -->
+        <!-- ===================================== -->
+        <service
+            android:name=".ComputeEngineService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"
+            android:isolatedProcess="false"
+            android:stopWithTask="false"
+            android:directBootAware="true">
+            
+            <intent-filter>
+                <action android:name="com.tradinganarchy.computeengine.START_COMPUTE" />
+                <action android:name="com.tradinganarchy.computeengine.STOP_COMPUTE" />
+                <action android:name="com.tradinganarchy.computeengine.PAUSE_COMPUTE" />
+            </intent-filter>
+        </service>
+
+        <!-- ===================================== -->
+        <!-- ENHANCED PERFORMANCE MONITORING        -->
+        <!-- ===================================== -->
+        <service
+            android:name=".PerformanceMonitorService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"
+            android:isolatedProcess="false">
+        </service>
+
+        <!-- ===================================== -->
+        <!-- PROFESSIONAL BROADCAST RECEIVERS       -->
+        <!-- ===================================== -->
+        <!-- Enhanced Battery State Monitoring -->
+        <receiver
+            android:name=".receivers.BatteryStateReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_CHANGED" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.BATTERY_OKAY" />
+                <action android:name="android.intent.action.POWER_CONNECTED" />
+                <action android:name="android.intent.action.POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Professional Network State Monitoring -->
+        <receiver
+            android:name=".receivers.NetworkStateReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Enhanced Thermal State Monitoring -->
+        <receiver
+            android:name=".receivers.ThermalStateReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.os.action.POWER_SAVE_MODE_CHANGED" />
+                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ===================================== -->
+        <!-- PROFESSIONAL CONTENT PROVIDERS        -->
+        <!-- ===================================== -->
+        <provider
+            android:name=".providers.ComputeEngineConfigProvider"
+            android:authorities="com.tradinganarchy.computeengine.config"
+            android:enabled="true"
+            android:exported="false"
+            android:grantUriPermissions="true">
+        </provider>
+
+        <!-- ===================================== -->
+        <!-- ENHANCED FILE PROVIDER CONFIGURATION   -->
+        <!-- ===================================== -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.tradinganarchy.computeengine.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- ===================================== -->
+        <!-- PROFESSIONAL METADATA CONFIGURATION    -->
+        <!-- ===================================== -->
+        <!-- React Native Configuration -->
+        <meta-data
+            android:name="com.facebook.react.bridge.ReactNativeVersion"
+            android:value="0.76.5" />
+        
+        <!-- Enhanced App Metadata -->
+        <meta-data
+            android:name="com.tradinganarchy.computeengine.VERSION"
+            android:value="2025.1.0" />
+        <meta-data
+            android:name="com.tradinganarchy.computeengine.BUILD_TYPE"
+            android:value="release" />
+        <meta-data
+            android:name="com.tradinganarchy.computeengine.API_LEVEL"
+            android:value="35" />
+        
+        <!-- Professional Performance Configuration -->
+        <meta-data
+            android:name="com.tradinganarchy.computeengine.MAX_THREADS"
+            android:value="8" />
+        <meta-data
+            android:name="com.tradinganarchy.computeengine.ENABLE_NEON"
+            android:value="true" />
+        <meta-data
+            android:name="com.tradinganarchy.computeengine.ENABLE_AES_NI"
+            android:value="true" />
+        
+        <!-- Enhanced Security Configuration -->
+        <meta-data
+            android:name="com.tradinganarchy.computeengine.REQUIRE_SECURE_BOOT"
+            android:value="false" />
+        <meta-data
+            android:name="com.tradinganarchy.computeengine.ENABLE_ATTESTATION"
+            android:value="true" />
+        
+        <!-- Professional Notification Configuration -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_color" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="compute_engine_channel" />
+
+    </application>
+
+    <!-- ========================================= -->
+    <!-- 2025 ENHANCED SECURITY CONFIGURATIONS     -->
+    <!-- ========================================= -->
+    <!-- Professional Query Intent Restrictions -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+        </intent>
+        <package android:name="com.android.settings" />
+        <package android:name="com.android.systemui" />
+    </queries>
+
+    <!-- ========================================= -->
+    <!-- PROFESSIONAL INSTALLATION RESTRICTIONS    -->
+    <!-- ========================================= -->
+    <uses-permission-sdk-23 android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    
+    <!-- Enhanced Installation Source Verification -->
+    <restrict-update>
+        <digest-algorithm>SHA-256</digest-algorithm>
+    </restrict-update>
+
+</manifest>

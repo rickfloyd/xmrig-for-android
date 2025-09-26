@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Trading Anarchy - Android Compute Engine
+# hwloc Dependency Fetcher - Retrieves hardware locality library for system topology detection
+# Copyright (c) 2025 Trading Anarchy. All rights reserved.
+#
 
 set -e
 

@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Trading Anarchy - Android Compute Engine
+# OpenSSL Dependency Fetcher - Retrieves OpenSSL library for cryptographic operations
+# Copyright (c) 2025 Trading Anarchy. All rights reserved.
+#
 
 set -e
 

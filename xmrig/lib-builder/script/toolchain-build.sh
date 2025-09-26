@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Trading Anarchy - Android Compute Engine
+# Toolchain Builder - Sets up cross-compilation toolchains for Android development
+# Copyright (c) 2025 Trading Anarchy. All rights reserved.
+#
 
 set -e
 

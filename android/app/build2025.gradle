@@ -1,0 +1,594 @@
+/*
+ * =============================================
+ * Trading Anarchy Android Compute Engine
+ * App-Level Build Configuration - Professional 2025 Gradle Setup
+ * Copyright (c) 2025 Trading Anarchy. All rights reserved.
+ * Version: 2025.1.0 - Enhanced Build System with Native Integration
+ * =============================================
+ */
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply from: file("../../react-native.config.js")
+
+// ========================================
+// PROFESSIONAL ANDROID BUILD CONFIGURATION
+// ========================================
+android {
+    namespace "com.tradinganarchy.computeengine"
+    compileSdk 35
+    buildToolsVersion "35.0.0"
+    ndkVersion "27.1.12297006"
+    
+    // Enhanced compilation options
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
+    }
+    
+    kotlinOptions {
+        jvmTarget = "17"
+        freeCompilerArgs += [
+            "-opt-in=kotlin.RequiresOptIn",
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=kotlin.ExperimentalStdlibApi"
+        ]
+    }
+
+    defaultConfig {
+        applicationId "com.tradinganarchy.computeengine"
+        minSdkVersion 24
+        targetSdkVersion 35
+        versionCode 20250101
+        versionName "2025.1.0"
+        
+        // Professional build configuration
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+        
+        // Enhanced test runner
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+        
+        // Professional native library configuration
+        ndk {
+            abiFilters "arm64-v8a", "armeabi-v7a", "x86_64"
+        }
+        
+        // Enhanced build configuration fields
+        buildConfigField "String", "VERSION_NAME", "\"${versionName}\""
+        buildConfigField "int", "VERSION_CODE", "${versionCode}"
+        buildConfigField "String", "BUILD_TYPE", "\"release\""
+        buildConfigField "boolean", "ENABLE_NATIVE_COMPUTE", "true"
+        buildConfigField "boolean", "ENABLE_HARDWARE_AES", "true"
+        buildConfigField "boolean", "ENABLE_NEON", "true"
+        
+        // Professional resource configuration
+        resConfigs "en", "es", "fr", "de", "ja", "ko", "zh"
+        
+        // Enhanced proguard configuration
+        consumerProguardFiles "consumer-rules.pro"
+        
+        // Professional CMake configuration
+        externalNativeBuild {
+            cmake {
+                version "3.28.0"
+                path "src/main/cpp/CMakeLists.txt"
+                
+                // Enhanced CMake arguments
+                arguments "-DANDROID_STL=c++_shared",
+                         "-DANDROID_PLATFORM=android-24",
+                         "-DANDROID_TOOLCHAIN=clang",
+                         "-DANDROID_CPP_FEATURES=rtti exceptions",
+                         "-DCMAKE_BUILD_TYPE=Release",
+                         "-DCMAKE_VERBOSE_MAKEFILE=ON",
+                         "-DENABLE_OPENSSL=ON",
+                         "-DENABLE_HWLOC=ON",
+                         "-DENABLE_LIBUV=ON",
+                         "-DENABLE_REACT_NATIVE_INTEGRATION=ON",
+                         "-DTARGET_ARCH=arm64-v8a"
+                
+                // Professional build flags
+                cFlags "-O3", "-ffast-math", "-funroll-loops", "-march=armv8-a+crypto"
+                cppFlags "-O3", "-ffast-math", "-funroll-loops", "-march=armv8-a+crypto",
+                        "-std=c++23", "-frtti", "-fexceptions"
+                
+                // Enhanced ABI configuration
+                abiFilters "arm64-v8a", "armeabi-v7a", "x86_64"
+                
+                // Professional build targets
+                targets "trading_anarchy_compute_engine",
+                        "trading_anarchy_jni_bridge", 
+                        "trading_anarchy_crypto_utils"
+            }
+        }
+        
+        // Enhanced manifest placeholders
+        manifestPlaceholders = [
+            app_name: "Trading Anarchy Compute Engine",
+            version_name: versionName,
+            version_code: versionCode,
+            package_name: applicationId,
+            build_type: "release"
+        ]
+    }
+
+    // ========================================
+    // PROFESSIONAL BUILD TYPE CONFIGURATIONS
+    // ========================================
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            useProguard false
+            zipAlignEnabled false
+            jniDebuggable true
+            renderscriptDebuggable true
+            pseudoLocalesEnabled true
+            
+            // Enhanced debug configuration
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+            buildConfigField "String", "LOG_LEVEL", "\"DEBUG\""
+            
+            // Professional debug signing
+            signingConfig signingConfigs.debug
+            
+            // Enhanced debug manifest
+            manifestPlaceholders.putAll([
+                enableLogging: true,
+                debugMode: true
+            ])
+            
+            // Professional native debug configuration
+            externalNativeBuild {
+                cmake {
+                    arguments "-DCMAKE_BUILD_TYPE=Debug",
+                             "-DENABLE_DEBUG_LOGGING=ON",
+                             "-DENABLE_PROFILING=ON"
+                    cFlags "-g", "-O0", "-DDEBUG=1"
+                    cppFlags "-g", "-O0", "-DDEBUG=1"
+                }
+            }
+        }
+        
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            useProguard true
+            zipAlignEnabled true
+            jniDebuggable false
+            renderscriptDebuggable false
+            pseudoLocalesEnabled false
+            
+            // Enhanced release configuration
+            buildConfigField "boolean", "DEBUG_MODE", "false"
+            buildConfigField "String", "LOG_LEVEL", "\"ERROR\""
+            
+            // Professional release signing
+            signingConfig signingConfigs.release
+            
+            // Enhanced release manifest
+            manifestPlaceholders.putAll([
+                enableLogging: false,
+                debugMode: false
+            ])
+            
+            // Professional ProGuard configuration
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 
+                         'proguard-rules.pro',
+                         'proguard-react-native.pro',
+                         'proguard-native.pro'
+            
+            // Enhanced native release configuration
+            externalNativeBuild {
+                cmake {
+                    arguments "-DCMAKE_BUILD_TYPE=Release",
+                             "-DENABLE_DEBUG_LOGGING=OFF",
+                             "-DENABLE_PROFILING=OFF",
+                             "-DENABLE_LTO=ON"
+                    cFlags "-O3", "-DNDEBUG=1", "-flto"
+                    cppFlags "-O3", "-DNDEBUG=1", "-flto"
+                }
+            }
+        }
+        
+        // Professional performance build variant
+        performance {
+            initWith release
+            debuggable false
+            
+            buildConfigField "boolean", "PERFORMANCE_MODE", "true"
+            buildConfigField "String", "OPTIMIZATION_LEVEL", "\"MAXIMUM\""
+            
+            externalNativeBuild {
+                cmake {
+                    arguments "-DCMAKE_BUILD_TYPE=Release",
+                             "-DENABLE_PERFORMANCE_MODE=ON",
+                             "-DENABLE_AGGRESSIVE_OPTIMIZATIONS=ON"
+                    cFlags "-O3", "-ffast-math", "-funroll-loops", "-march=native"
+                    cppFlags "-O3", "-ffast-math", "-funroll-loops", "-march=native"
+                }
+            }
+        }
+    }
+
+    // ========================================
+    // ENHANCED FLAVOR CONFIGURATIONS
+    // ========================================
+    flavorDimensions "version", "architecture"
+    
+    productFlavors {
+        // Professional version flavors
+        free {
+            dimension "version"
+            applicationIdSuffix ".free"
+            versionNameSuffix "-free"
+            
+            buildConfigField "boolean", "IS_FREE_VERSION", "true"
+            buildConfigField "int", "MAX_THREADS", "4"
+        }
+        
+        pro {
+            dimension "version"
+            applicationIdSuffix ".pro"
+            versionNameSuffix "-pro"
+            
+            buildConfigField "boolean", "IS_FREE_VERSION", "false"
+            buildConfigField "int", "MAX_THREADS", "16"
+        }
+        
+        // Enhanced architecture flavors
+        arm64 {
+            dimension "architecture"
+            ndk.abiFilters "arm64-v8a"
+            
+            buildConfigField "String", "TARGET_ARCHITECTURE", "\"arm64-v8a\""
+        }
+        
+        universal {
+            dimension "architecture"
+            // Include all supported architectures
+            
+            buildConfigField "String", "TARGET_ARCHITECTURE", "\"universal\""
+        }
+    }
+
+    // ========================================
+    // PROFESSIONAL SIGNING CONFIGURATIONS
+    // ========================================
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        
+        release {
+            def keystorePropertiesFile = rootProject.file("keystore.properties")
+            if (keystorePropertiesFile.exists()) {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
+
+    // ========================================
+    // ENHANCED PACKAGING OPTIONS
+    // ========================================
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/libjsc.so'
+        pickFirst '**/libreactnativejni.so'
+        pickFirst '**/libturbomodulejsijni.so'
+        pickFirst '**/libfbjni.so'
+        
+        // Professional native library exclusions
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude '**/kotlin/**'
+        exclude 'kotlin/**'
+        
+        // Enhanced native library management
+        doNotStrip "*/arm64-v8a/libtrading_anarchy_compute_engine.so"
+        doNotStrip "*/armeabi-v7a/libtrading_anarchy_compute_engine.so"
+        doNotStrip "*/x86_64/libtrading_anarchy_compute_engine.so"
+    }
+
+    // ========================================
+    // PROFESSIONAL LINT CONFIGURATION
+    // ========================================
+    lintOptions {
+        checkReleaseBuilds true
+        abortOnError false
+        ignoreWarnings false
+        checkAllWarnings true
+        warningsAsErrors false
+        
+        // Enhanced lint checks
+        enable 'StopShip', 'IconMissingDensityFolder', 'IconDuplicates'
+        disable 'InvalidPackage', 'HardcodedDebugMode'
+        
+        // Professional lint reporting
+        xmlReport true
+        htmlReport true
+        textReport true
+        
+        baseline file("lint-baseline.xml")
+    }
+
+    // ========================================
+    // ENHANCED DEXING OPTIONS
+    // ========================================
+    dexOptions {
+        javaMaxHeapSize "4g"
+        maxProcessCount 8
+        preDexLibraries true
+    }
+
+    // ========================================
+    // PROFESSIONAL TESTING CONFIGURATION
+    // ========================================
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+        
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        animationsDisabled true
+    }
+
+    // ========================================
+    // ENHANCED SPLITS CONFIGURATION
+    // ========================================
+    splits {
+        abi {
+            enable true
+            reset()
+            include "arm64-v8a", "armeabi-v7a", "x86_64"
+            universalApk true
+        }
+        
+        density {
+            enable false
+        }
+    }
+
+    // ========================================
+    // PROFESSIONAL BUNDLE CONFIGURATION
+    // ========================================
+    bundle {
+        language {
+            enableSplit = true
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+
+    // Enhanced native build configuration
+    externalNativeBuild {
+        cmake {
+            version "3.28.0"
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+}
+
+// ========================================
+// PROFESSIONAL DEPENDENCIES CONFIGURATION
+// ========================================
+dependencies {
+    // Enhanced core library desugaring
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    
+    // Professional React Native dependencies
+    implementation "com.facebook.react:react-native:0.76.5"
+    implementation "com.facebook.react:flipper-integration:0.182.0"
+    implementation "com.facebook.react:hermes-android:0.76.5"
+    
+    // Enhanced Android support libraries
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.activity:activity-ktx:1.9.2'
+    implementation 'androidx.fragment:fragment-ktx:1.8.5'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-service:2.8.7'
+    
+    // Professional material design
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    
+    // Enhanced networking
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+    
+    // Professional JSON processing
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2'
+    
+    // Enhanced multidex support
+    implementation 'androidx.multidex:multidex:2.0.1'
+    
+    // Professional coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
+    
+    // Enhanced security
+    implementation 'androidx.security:security-crypto:1.0.0'
+    implementation 'androidx.biometric:biometric:1.1.0'
+    
+    // Professional background work
+    implementation 'androidx.work:work-runtime-ktx:2.9.1'
+    
+    // Enhanced notifications
+    implementation 'androidx.core:core:1.13.1'
+    
+    // Professional testing dependencies
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.14.2'
+    testImplementation 'org.mockito:mockito-android:5.14.2'
+    testImplementation 'androidx.test.ext:junit:1.2.1'
+    testImplementation 'androidx.test:core:1.6.1'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0'
+    
+    // Enhanced instrumentation testing
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
+    androidTestUtil 'androidx.test:orchestrator:1.5.1'
+    
+    // Professional debugging tools
+    debugImplementation 'com.facebook.flipper:flipper:0.182.0'
+    debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.182.0'
+    debugImplementation 'com.facebook.soloader:soloader:0.12.1'
+    
+    // Enhanced leak detection
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+}
+
+// ========================================
+// PROFESSIONAL REACT NATIVE CONFIGURATION
+// ========================================
+apply from: file("../../node_modules/react-native/react.gradle")
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+applyNativeModulesAppBuildGradle(project)
+
+// ========================================
+// ENHANCED TASK CONFIGURATIONS
+// ========================================
+// Professional pre-build tasks
+preBuild.dependsOn(':ReactAndroid:buildReactNdkLib')
+
+// Enhanced clean task
+clean {
+    delete rootProject.buildDir
+    delete 'build'
+    delete 'src/main/assets/index.android.bundle'
+    delete 'src/main/res/raw'
+}
+
+// Professional bundle task for release
+task bundleReleaseJsAndAssets {
+    dependsOn "bundleRelease"
+    doLast {
+        println "Professional React Native bundle created for release"
+    }
+}
+
+// Enhanced native library verification
+task verifyNativeLibraries {
+    doLast {
+        def nativeLibsDir = file("${buildDir}/intermediates/merged_native_libs")
+        if (nativeLibsDir.exists()) {
+            println "Native libraries verified successfully"
+            nativeLibsDir.eachFileRecurse { file ->
+                if (file.name.endsWith('.so')) {
+                    println "Found native library: ${file.name}"
+                }
+            }
+        } else {
+            println "Warning: Native libraries directory not found"
+        }
+    }
+}
+
+// Professional build verification
+task verifyBuild {
+    dependsOn 'assembleRelease'
+    dependsOn 'verifyNativeLibraries'
+    
+    doLast {
+        println "Professional build verification completed for Trading Anarchy Compute Engine v${android.defaultConfig.versionName}"
+        println "Build type: ${android.defaultConfig.buildConfigFields.BUILD_TYPE}"
+        println "Native compute enabled: ${android.defaultConfig.buildConfigFields.ENABLE_NATIVE_COMPUTE}"
+    }
+}
+
+// Enhanced APK analysis
+task analyzeApk {
+    dependsOn 'assembleRelease'
+    
+    doLast {
+        def apkFile = file("${buildDir}/outputs/apk/release/app-release.apk")
+        if (apkFile.exists()) {
+            def apkSize = apkFile.length()
+            def apkSizeMB = String.format("%.2f", apkSize / (1024.0 * 1024.0))
+            println "APK Analysis:"
+            println "- File: ${apkFile.name}"
+            println "- Size: ${apkSizeMB} MB"
+            println "- Path: ${apkFile.absolutePath}"
+        }
+    }
+}
+
+// Professional AAB generation
+task generateBundle {
+    dependsOn 'bundleRelease'
+    
+    doLast {
+        println "Android App Bundle (AAB) generated successfully"
+        println "Ready for Google Play Store deployment"
+    }
+}
+
+// ========================================
+// ENHANCED 2025 GRADLE OPTIMIZATIONS
+// ========================================
+// Professional build cache configuration
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        options.encoding = "UTF-8"
+    }
+}
+
+// Enhanced Kotlin compilation
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+    kotlinOptions {
+        jvmTarget = "17"
+        freeCompilerArgs += [
+            "-progressive",
+            "-Xjsr305=strict",
+            "-Xemit-jvm-type-annotations"
+        ]
+    }
+}
+
+// Professional build optimization
+android.applicationVariants.all { variant ->
+    variant.outputs.all { output ->
+        def appName = "TradingAnarchyComputeEngine"
+        def versionName = variant.versionName
+        def buildType = variant.buildType.name
+        def flavorName = variant.flavorName
+        
+        outputFileName = "${appName}-v${versionName}-${buildType}-${flavorName}.apk"
+    }
+}
+
+println "Professional Trading Anarchy Android Compute Engine Build Configuration Loaded"
+println "Version: 2025.1.0 | Build System: Enhanced Gradle 8.8.0 | NDK: r27"

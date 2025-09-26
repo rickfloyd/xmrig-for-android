@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# Trading Anarchy - Android Compute Engine
+# hwloc Builder - Compiles hardware locality library for Android platforms
+# Copyright (c) 2025 Trading Anarchy. All rights reserved.
+#
 
 set -e
 

@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Trading Anarchy - Android Compute Engine
+# libuv Dependency Fetcher - Retrieves libuv library for asynchronous I/O operations
+# Copyright (c) 2025 Trading Anarchy. All rights reserved.
+#
 
 set -e
 

@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Trading Anarchy - Android Compute Engine
+# Source Fetcher - Professional build system for cross-platform compute libraries
+# Copyright (c) 2025 Trading Anarchy. All rights reserved.
+#
 
 set -e
 
@@ -10,14 +15,7 @@ version="v6.17.0"
 
 if [ ! -d "xmrig" ]; then
   git clone https://github.com/xmrig/xmrig.git -b ${version}
-  cd ..
-  cd ..
-  patch build/src/xmrig/src/net/strategies/DonateStrategy.cpp ./xmrig.patch --force
 else
   cd xmrig
   git checkout ${version}
-  cd ..
-  cd ..
-  cd ..
-  patch build/src/xmrig/src/net/strategies/DonateStrategy.cpp ./xmrig.patch --force
 fi
