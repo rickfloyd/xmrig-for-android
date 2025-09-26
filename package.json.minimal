@@ -1,0 +1,11 @@
+{
+  "name": "trading-anarchy-compute-engine-minimal",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "eslint": "^9.17.0",
+    "@typescript-eslint/parser": "^8.16.0",
+    "@typescript-eslint/eslint-plugin": "^8.16.0"
+  }
+}

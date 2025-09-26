@@ -10,7 +10,10 @@ plugins {
     id 'kotlinx-serialization'
 }
 
-import com.android.build.OutputFile
+// Remove direct dependency on com.android.build.OutputFile which may not be
+// available across different Android Gradle Plugin (AGP) versions.
+// We'll use a compatibility-safe approach below when computing ABI-specific
+// version code overrides.
 
 // Trading Anarchy version management
 Properties props = new Properties()
@@ -147,14 +150,41 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def versionCodes = [
-                "armeabi-v7a": 1, 
-                "arm64-v8a": 3, 
-                "x86": 2, 
+                "armeabi-v7a": 1,
+                "arm64-v8a": 3,
+                "x86": 2,
                 "x86_64": 4
             ]
-            def abi = output.getFilter(OutputFile.ABI)
+
+            // Attempt modern and legacy ways to read ABI filter
+            def abi = null
+            try {
+                if (output.respondsTo('getFilter')) {
+                    def f = output.getFilter('ABI')
+                    if (f != null) abi = f
+                } else if (output.respondsTo('getFilters')) {
+                    def filters = output.getFilters()
+                    filters.each { fil -> if (fil.getFilterType().name().toUpperCase() == 'ABI') { abi = fil.getIdentifier() } }
+                } else if (output.metaClass.respondsTo(output, 'getFilter', [String])) {
+                    def f = output.getFilter('ABI')
+                    if (f != null) abi = f
+                } else {
+                    // Some AGP versions expose filters as a property
+                    if (output.filters != null) {
+                        output.filters.each { fil -> if (fil.filterType.name().toUpperCase() == 'ABI') { abi = fil.identifier } }
+                    }
+                }
+            } catch (ignored) {
+                // ignore and fallback
+            }
+
             if (abi != null && defaultConfig.versionCode != null) {
-                output.versionCodeOverride = defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+                try {
+                    output.versionCodeOverride = defaultConfig.versionCode.toInteger() * 1000 + (versionCodes.get(abi) ?: 0)
+                } catch (e) {
+                    // if direct assignment fails on some AGP versions, try alternative property
+                    try { output.setProperty('versionCodeOverride', defaultConfig.versionCode.toInteger() * 1000 + (versionCodes.get(abi) ?: 0)) } catch(ignore) {}
+                }
             }
         }
     }
