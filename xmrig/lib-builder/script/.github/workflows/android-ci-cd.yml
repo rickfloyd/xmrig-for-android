@@ -37,7 +37,16 @@ env:
   # Project Configuration
   PROJECT_NAME: "Trading Anarchy Android Compute Engine"
   PACKAGE_NAME: "com.tradinganarchy.computeengine"
-  
+  # Secret placeholders for local/dev runs (set real secrets in repository for production)
+  ANDROID_KEYSTORE_BASE64: ''
+  ANDROID_KEYSTORE_PASSWORD: ''
+  ANDROID_KEY_PASSWORD: ''
+  DEBUG_KEYSTORE_BASE64: ''
+  SONAR_TOKEN: ''
+  CODECOV_TOKEN: ''
+  FIREBASE_SERVICE_ACCOUNT_KEY: ''
+  FIREBASE_APP_ID: ''
+
   # Android Configuration
   ANDROID_COMPILE_SDK: 35
   ANDROID_BUILD_TOOLS_VERSION: 35.0.0
@@ -126,7 +135,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
         continue-on-error: true
 
   # Unit Tests
@@ -153,7 +162,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ env.CODECOV_TOKEN }}
           file: ./coverage/lcov.info
           flags: unittests
           name: codecov-umbrella
@@ -282,7 +291,7 @@ jobs:
         if: env.BUILD_TYPE == 'release'
         run: |
           mkdir -p keystores
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > keystores/trading-anarchy-release.keystore
+          echo "${{ env.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > keystores/trading-anarchy-release.keystore
       
       - name: Build Debug APK
         if: env.BUILD_TYPE == 'debug'
@@ -301,15 +310,15 @@ jobs:
             -PversionName=$VERSION_NAME \
             -PMYAPP_UPLOAD_STORE_FILE="../keystores/trading-anarchy-release.keystore" \
             -PMYAPP_UPLOAD_KEY_ALIAS="trading-anarchy-key" \
-            -PMYAPP_UPLOAD_STORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
-            -PMYAPP_UPLOAD_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
+            -PMYAPP_UPLOAD_STORE_PASSWORD="${{ env.ANDROID_KEYSTORE_PASSWORD }}" \
+            -PMYAPP_UPLOAD_KEY_PASSWORD="${{ env.ANDROID_KEY_PASSWORD }}"
       
       - name: Sign Debug APK
         if: env.BUILD_TYPE == 'debug'
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: android/app/build/outputs/apk/debug
-          signingKeyBase64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
+          signingKeyBase64: ${{ env.DEBUG_KEYSTORE_BASE64 }}
           alias: androiddebugkey
           keyStorePassword: android
           keyPassword: android
@@ -424,8 +433,8 @@ jobs:
       - name: Deploy to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{ secrets.FIREBASE_APP_ID }}
-          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          appId: ${{ env.FIREBASE_APP_ID }}
+          serviceCredentialsFileContent: ${{ env.FIREBASE_SERVICE_ACCOUNT_KEY }}
           groups: testers,internal
           file: apk/TradingAnarchy-*.apk
           releaseNotes: |

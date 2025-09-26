@@ -20,7 +20,10 @@ props.each { prop ->
 }
 
 project.ext.set("versionName", "${project.ext.majorVersion}.${project.ext.minorVersion}.${project.ext.patchVersion}")
-project.ext.set("versionCode", project.ext.majorVersion as Integer * 1000 + project.ext.minorVersion as Integer * 100 + project.ext.patchVersion as Integer)
+def __maj = (project.hasProperty('majorVersion') ? project.majorVersion.toInteger() : 2025)
+def __min = (project.hasProperty('minorVersion') ? project.minorVersion.toInteger() : 1)
+def __pat = (project.hasProperty('patchVersion') ? project.patchVersion.toInteger() : 0)
+project.ext.set('versionCode', __maj * 1000 + __min * 100 + __pat)
 
 // React Native configuration optimized for 2025
 project.ext.react = [
