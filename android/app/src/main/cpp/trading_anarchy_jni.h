@@ -305,6 +305,19 @@ JNIEXPORT jboolean JNICALL
 Java_com_tradinganarchy_computeengine_TradingAnarchyEngine_nativeExportStats(
     JNIEnv *env, jobject thiz, jstring format, jstring filepath);
 
+// Benchmark Functions
+JNIEXPORT jobject JNICALL
+Java_com_tradinganarchy_xmrig_TradingAnarchyModule_nativeBenchmarkAlgorithm(
+    JNIEnv *env, jobject thiz, jstring algorithm, jint duration, jint threads);
+
+JNIEXPORT jboolean JNICALL
+Java_com_tradinganarchy_xmrig_TradingAnarchyModule_nativeStopBenchmark(
+    JNIEnv *env, jobject thiz);
+
+JNIEXPORT jdouble JNICALL
+Java_com_tradinganarchy_xmrig_TradingAnarchyModule_nativeGetCpuTemperature(
+    JNIEnv *env, jobject thiz);
+
 JNIEXPORT void JNICALL
 Java_com_tradinganarchy_computeengine_TradingAnarchyEngine_nativeCleanup(
     JNIEnv *env, jobject thiz);

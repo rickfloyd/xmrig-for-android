@@ -18,6 +18,10 @@ export {
   useMinerSummary,
 } from './use-miner-summary.hook';
 
+export {
+  useBenchmark,
+} from './use-benchmark.hook';
+
 export type {
   IMinerSummary,
 } from './use-miner-summary.hook';

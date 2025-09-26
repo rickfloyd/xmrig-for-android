@@ -240,11 +240,12 @@ jobs:
           cache: 'npm'
       
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v2
         with:
+          cmdline-tools-version: '8512546'
           api-level: ${{ env.ANDROID_COMPILE_SDK }}
-          build-tools: ${{ env.ANDROID_BUILD_TOOLS_VERSION }}
-          ndk: ${{ env.NDK_VERSION }}
+          target: google_apis
+          arch: x86_64
       
       - name: Install dependencies
         run: npm ci

@@ -7,6 +7,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    // id 'kotlin-kapt'  // Temporarily disabled due to missing React Native annotations
     id 'kotlinx-serialization'
 }
 
@@ -45,7 +46,7 @@ project.ext.react = [
     enableCodePush: false
 ]
 
-apply from: "../../node_modules/react-native/react.gradle"
+// apply from: "../../node_modules/react-native/react.gradle"  // Deprecated in RN 0.76+
 
 // Build optimization settings
 def enableSeparateBuildPerCPUArchitecture = false
@@ -62,7 +63,7 @@ def reactNativeArchitectures() {
 
 android {
     namespace 'com.tradinganarchy.compute'
-    ndkVersion rootProject.ext.ndkVersion
+    // ndkVersion rootProject.ext.ndkVersion  # Disabled - NDK not installed
     compileSdk rootProject.ext.compileSdkVersion
     
     // Java compatibility for 2025
@@ -94,10 +95,10 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         
-        // Native library optimization
-        ndk {
-            abiFilters (*reactNativeArchitectures())
-        }
+        // Native library optimization - Disabled, NDK not installed
+        // ndk {
+        //     abiFilters (*reactNativeArchitectures())
+        // }
         
         // ProGuard configuration for release builds
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -194,6 +195,7 @@ android {
         buildConfig true
         viewBinding true
         dataBinding false
+        aidl true
     }
     
     // Packaging options
@@ -209,6 +211,11 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
         exclude("META-INF/*.kotlin_module")
+        
+        // Set legacy packaging for native libs as required by AndroidManifest.xml
+        jniLibs {
+            useLegacyPackaging true
+        }
     }
     
     // Lint options
@@ -228,16 +235,16 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     
-    // React Native core
-    implementation("com.facebook.react:react-android")
-    implementation("com.facebook.react:flipper-integration")
+    // React Native core - temporarily disabled due to React Native 0.76.x configuration issues
+    // implementation("com.facebook.react:react-android")
+    // implementation("com.facebook.react:flipper-integration")
     
-    // Hermes JavaScript Engine
-    if (enableHermes) {
-        implementation("com.facebook.react:hermes-android")
-    } else {
-        implementation jscFlavor
-    }
+    // Hermes JavaScript Engine - temporarily disabled
+    // if (enableHermes) {
+    //     implementation("com.facebook.react:hermes-android")
+    // } else {
+    //     implementation jscFlavor
+    // }
     
     // AndroidX libraries (2025 versions)
     implementation 'androidx.core:core-ktx:1.15.0'
@@ -269,7 +276,7 @@ dependencies {
     def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    // kapt "androidx.room:room-compiler:$room_version"  // Temporarily disabled due to KAPT issues
     
     // Work Manager
     def work_version = "2.10.0"
@@ -285,9 +292,6 @@ dependencies {
     
     // EventBus
     implementation 'org.greenrobot:eventbus:3.3.1'
-    
-    // React Native specific dependencies
-    implementation project(':react-native-splash-screen')
     
     // Testing dependencies
     testImplementation 'junit:junit:4.13.2'
@@ -335,11 +339,11 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 // Apply React Native community modules
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
-applyNativeModulesAppBuildGradle(project)
+// apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+// applyNativeModulesAppBuildGradle(project)
 
 // Vector icons fonts
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+// apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"

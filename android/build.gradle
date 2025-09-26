@@ -5,17 +5,17 @@
 buildscript {
     ext {
         // 2025 Android Build System Configuration
-        buildToolsVersion = "34.0.0"
+        buildToolsVersion = "35.0.0"
         minSdkVersion = 24
         compileSdkVersion = 35
         targetSdkVersion = 35
-        ndkVersion = "27.2.12479018"
-        kotlinVersion = '2.1.0'
+        ndkVersion = "25.2.9519653"
+        kotlinVersion = '2.0.0'
         
         // Trading Anarchy Build Configuration
         tradingAnarchyComputeEngine = "2.0.0"
-        gradleVersion = "8.12"
-        agpVersion = "8.8.0"
+        gradleVersion = "8.4"
+        agpVersion = "8.4.0"
     }
     repositories {
         google()

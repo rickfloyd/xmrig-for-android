@@ -7,8 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.WindowManager;
 
-import org.devio.rn.splashscreen.SplashScreen;
-
 public class MainActivity extends ReactActivity {
 
   /**
@@ -22,7 +20,7 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    SplashScreen.show(this);  // here
+    // SplashScreen.show(this);  // Disabled - dependency removed
     super.onCreate(null);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

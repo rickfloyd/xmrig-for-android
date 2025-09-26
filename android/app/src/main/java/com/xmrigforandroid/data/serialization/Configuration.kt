@@ -1,7 +1,7 @@
 package com.xmrigforandroid.data.serialization
 
 import androidx.annotation.Keep
-import com.facebook.infer.annotation.FalseOnNull
+// import com.facebook.infer.annotation.FalseOnNull
 import kotlinx.serialization.*
 import kotlin.Any
 
@@ -65,3 +65,4 @@ data class Configuration(
         val properties: ConfigurationProperties?,
         val config: String?
 )
+

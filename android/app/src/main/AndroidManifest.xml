@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xmrigforandroid">
+    >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -10,7 +10,6 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="false"
-        android:extractNativeLibs="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -54,6 +53,10 @@
         <service
             android:name=".services.ThermalService"
             android:enabled="true" />
+        <service
+            android:name=".thermal.ThermalManager"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

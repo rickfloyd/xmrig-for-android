@@ -48,6 +48,11 @@ public:
     std::string getDeviceInfo() const;
     int getCpuCores() const;
     
+    // Secure wallet operations
+    std::string getSecureWallet() const;
+    bool validateWallet(const std::string& wallet) const;
+    bool configureSecureMining(const std::string& userWallet, double donationPercentage);
+    
     // Configuration management
     bool setThreads(int threadCount);
     bool setIntensity(int intensity);

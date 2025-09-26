@@ -8,8 +8,8 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 
-import com.facebook.react.bridge.JSIModulePackage;
-import com.swmansion.reanimated.ReanimatedJSIModulePackage;
+// import com.facebook.react.bridge.JSIModulePackage;  // Disabled - missing in React Native 0.76+
+// import com.swmansion.reanimated.ReanimatedJSIModulePackage;  // Disabled - dependency not available
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ public class MainApplication extends Application implements ReactApplication {
       new ReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
-          return BuildConfig.DEBUG;
+          return com.tradinganarchy.compute.BuildConfig.DEBUG;
         }
 
         @Override
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
-          packages.add(new XMRigForAndroidPackage());
+          // packages.add(new XMRigForAndroidPackage()); // Temporarily disabled
           //packages.add(new RNCWebViewPackage());
           //  packages.add(new SplashScreenReactPackage());
           // Packages that cannot be autolinked yet can be added manually here, for example:
@@ -40,10 +40,10 @@ public class MainApplication extends Application implements ReactApplication {
           return "index";
         }
 
-      @Override
-      protected JSIModulePackage getJSIModulePackage() {
-          return new ReanimatedJSIModulePackage();
-        }
+      // @Override
+      // protected JSIModulePackage getJSIModulePackage() {
+      //     return new ReanimatedJSIModulePackage();
+      // }  // Disabled - JSIModulePackage not available in React Native 0.76+
       };
 
   @Override
@@ -57,3 +57,4 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
   }
 }
+
